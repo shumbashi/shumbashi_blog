@@ -1,7 +1,3 @@
-[submodule "shumbashi.github.io"]
-	path = shumbashi.github.io
-	url = git@github.com:shumbashi/shumbashi.github.io.git
-    ignore = all
 [submodule "output"]
 	path = output
 	url = git@github.com:shumbashi/shumbashi.github.io.git

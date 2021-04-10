@@ -128,9 +128,9 @@ def publish(c):
     """Publish to GitHub Pages"""
     preview(c)
     c.run('ghp-import -b {github_pages_branch} '
-          '-m {commit_message} '
-          '{deploy_path} -p'.format(**CONFIG))
-    # c.run('git push git@github.com:/shumbashi/shumbashi.github.io gh-pages:gh-pages')
+          '-m {commit_message} -o '
+          '{deploy_path}'.format(**CONFIG))
+    c.run('git push git@github.com:/shumbashi/shumbashi.github.io gh-pages:master')
 
 def pelican_run(cmd):
     cmd += ' ' + program.core.remainder  # allows to pass-through args to pelican
