@@ -29,7 +29,7 @@ CONFIG = {
     'commit_message': "'Publish site on {}'".format(datetime.date.today().isoformat()),
     # Host and port for `serve`
     'host': 'localhost',
-    'port': 8000,
+    'port': 9000,
 }
 
 @task
@@ -112,24 +112,25 @@ def livereload(c):
     server.serve(host=CONFIG['host'], port=CONFIG['port'], root=CONFIG['deploy_path'])
 
 
-@task
-def publish(c):
-    """Publish to production via rsync"""
-    pelican_run('-s {settings_publish}'.format(**CONFIG))
-    c.run(
-        'rsync --delete --exclude ".DS_Store" -pthrvz -c '
-        '-e "ssh -p {ssh_port}" '
-        '{} {ssh_user}@{ssh_host}:{ssh_path}'.format(
-            CONFIG['deploy_path'].rstrip('/') + '/',
-            **CONFIG))
+# @task
+# def publish(c):
+#     """Publish to production via rsync"""
+#     pelican_run('-s {settings_publish}'.format(**CONFIG))
+#     c.run(
+#         'rsync --delete --exclude ".DS_Store" -pthrvz -c '
+#         '-e "ssh -p {ssh_port}" '
+#         '{} {ssh_user}@{ssh_host}:{ssh_path}'.format(
+#             CONFIG['deploy_path'].rstrip('/') + '/',
+#             **CONFIG))
 
 @task
-def gh_pages(c):
+def publish(c):
     """Publish to GitHub Pages"""
     preview(c)
     c.run('ghp-import -b {github_pages_branch} '
           '-m {commit_message} '
-          '{deploy_path} -p'.format(**CONFIG))
+          '{deploy_path}'.format(**CONFIG))
+    c.run('git push git@github.com:/shumbashi/shumbashi.github.io gh-pages:gh-pages')
 
 def pelican_run(cmd):
     cmd += ' ' + program.core.remainder  # allows to pass-through args to pelican
